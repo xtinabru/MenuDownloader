@@ -10,6 +10,7 @@ async function downloadMenu() {
     await webPage.goto('https://toripolliisi.fi/ruokalista/', {
         waitUntil: 'networkidle2',
     });
+    
 
     // Wait for the menu elements to load
     await webPage.waitForSelector('.elementor-price-list-title', { timeout: 5000 });
