@@ -10,11 +10,9 @@ async function downloadMenu() {
     await webPage.goto('https://toripolliisi.fi/ruokalista/', {
         waitUntil: 'networkidle2',
     });
-    
 
     // Wait for the menu elements to load
     await webPage.waitForSelector('.elementor-price-list-title', { timeout: 5000 });
-
     // Extract the menu items
     const menuItems = await webPage.evaluate(() => {
         const items = [];
@@ -25,7 +23,7 @@ async function downloadMenu() {
 
         titles.forEach((title, index) => {
             const dishTitle = title.innerText.trim();
-            const dishPrice = prices[index]?.innerText.trim(); // Get the corresponding price
+            const dishPrice = prices[index]?.innerText.trim(); // Get the price
             
             items.push({ name: dishTitle, price: dishPrice });
         });
@@ -37,13 +35,13 @@ async function downloadMenu() {
 
 // Create a new PDF document
 const pdfDoc = await PDFDocument.create();
-let pdfPage = pdfDoc.addPage([600, 800]); // Create the first page
+let pdfPage = pdfDoc.addPage([600, 800]); 
 const fontSize = 12;
-let yPosition = 750; // Starting position for the text
+let yPosition = 750; 
 
 // Header
 pdfPage.drawText('Menu', { x: 50, y: yPosition, size: 20, color: rgb(0, 0, 0) });
-yPosition -= 30; // Move down after the header
+yPosition -= 30; 
 
 // Write each menu item to the PDF
 for (const item of menuItems) {
@@ -54,12 +52,9 @@ for (const item of menuItems) {
         pdfPage.drawText('Menu', { x: 50, y: yPosition, size: 20, color: rgb(0, 0, 0) }); // Add header on the new page
         yPosition -= 30; // Move down after the header
     }
-
-    // Write the dish name and price
     pdfPage.drawText(`${item.name}: ${item.price}`, { x: 50, y: yPosition, size: fontSize, color: rgb(128 / 255, 0, 128/244) });
-    yPosition -= 30; // Decrease yPosition for the next item
+    yPosition -= 30; 
 }
-
     // Save the PDF to a file
     const pdfBytes = await pdfDoc.save();
     const fs = require('fs');
@@ -70,5 +65,4 @@ for (const item of menuItems) {
     await browser.close();
 }
 
-// Run the function
 downloadMenu().catch(console.error);
